@@ -4,18 +4,33 @@ const getCompanyInfo = async () => {
         if (companyDataRes.ok) {
             const jsonCompanyDataRes = await companyDataRes.json();
             console.log(jsonCompanyDataRes);
-            jsonCompanyDataRes.forEach(async ob => {
-                const incomeInfoRes = await fetch(`https://recruitment.hal.skygate.io/incomes/${ob['id']}`)
+            jsonCompanyDataRes.forEach(async comp => {
+                const incomeInfoRes = await fetch(`https://recruitment.hal.skygate.io/incomes/${comp['id']}`)
                 if (incomeInfoRes.ok) {
                     const jsonIncomeInfoRes = await incomeInfoRes.json();
-                    // console.log(jsonIncomeInfoRes);
-                    ob['incomes'] = jsonIncomeInfoRes['incomes'];
-                    console.log(ob);
+                    comp['incomes'] = jsonIncomeInfoRes['incomes'];
+                    const today = new Date;
+                    let totalIncome = 0;
+                    let lastMonthIncome = 0;
+                    comp['incomes'].forEach(val => {
+                        totalIncome += parseInt(val['value']);
+                        const incomeDate = new Date(val['date']);
+                        if (incomeDate.getFullYear() == today.getFullYear() && incomeDate.getMonth() == today.getMonth() - 1 || incomeDate.getMonth() == 12 && today.getMonth() == 1 && today.getFullYear() - 1 == incomeDate.getFullYear()) {
+                            lastMonthIncome += parseInt(val['value']);
+                        };
+                    });
+                    comp['totalIncome'] = totalIncome;
+                    comp['lastMonthIncome'] = lastMonthIncome;
+                    comp['avgIncome'] = totalIncome/comp['incomes'].length;
+                    console.log(comp);
+                }
+                else {
+                    throw Error('Income data could not be retrieved.')
                 }
             })
         }
         else {
-            throw Error('Request did not succeed.')
+            throw Error('Company data could not be retrieved.')
         }
     }
     catch (err) {
