@@ -1,3 +1,15 @@
+const table = document.querySelector(".table");
+const tableRowCreate = obj => {
+    return `<div class="row">
+                <span>${obj.id}</span>
+                <span>${obj.name}</span>
+                <span>${obj.city}</span>
+                <span>${obj.totalIncome}</span>
+                <span>${obj.avgIncome}</span>
+                <span>${obj.lastMonthIncome}</span>
+            </div>`;
+}
+
 const getCompanyInfo = async () => {
     try {
         const companyDataRes = await fetch('https://recruitment.hal.skygate.io/companies')
@@ -23,6 +35,7 @@ const getCompanyInfo = async () => {
                     comp['lastMonthIncome'] = lastMonthIncome;
                     comp['avgIncome'] = totalIncome/comp['incomes'].length;
                     console.log(comp);
+                    table.appendChild(tableRowCreate(comp));
                 }
                 else {
                     throw Error('Income data could not be retrieved.')
