@@ -8,8 +8,8 @@ export default class Table extends Component {
         super(props);
         this.state = {
             companies: [],
-            sort: null,
-            sortBy: null
+            sortBy: null,
+            sortOrder: null
         };
         this.getCompanyInfo = this.getCompanyInfo.bind(this);
         this.getIncomeInfo = this.getIncomeInfo.bind(this);
@@ -82,40 +82,29 @@ export default class Table extends Component {
     }
 
     handleSort(e) {
-        // const sort = this.state.sort;
-        // const sortBy = this.state.sortBy;
+        const sortBy = this.state.sortBy;
+        let sortOrder = this.state.sortOrder;
         const target = e.target;
         const columnLabel = target.id;
-        if (columnLabel === "head-id") {
+        if (sortBy !== columnLabel) {
             this.setState({
-                sortBy: "head-id",
-                sort: "asc"
+                sortBy: columnLabel,
+                sortOrder: "asc"
             });
-            console.log(this.state.sort, this.state.sortBy);
-            const sorted = this.applySorting(this.state.sortBy, this.state.sort);
-            console.log(sorted);
-            this.setState({
-                companies: sorted
-            })
         }
-        // else if (columnLabel === "head-name") {
-
-        // }
-        // else if (columnLabel === 'head-city') {
-
-        // }
-        // else if (columnLabel === 'head-total-income') {
-
-        // }
-        // else if (columnLabel === 'head-avg-income') {
-
-        // }
-        // else if (columnLabel === 'head-last-month-income') {
-
-        // }
+        else {
+            sortOrder === "asc" ? sortOrder = "desc" : sortOrder = "asc";
+            this.setState({
+                sortOrder: sortOrder
+            });
+        };
+        const sorted = this.applySorting(this.state.sortBy, this.state.sortOrder);
+        this.setState({
+            companies: sorted
+        })
     }
 
-    compare(sortBy, sort) {
+    compare(sortBy, sortOrder) {
         return (a, b) => {
             let order = 0;
             if (a[sortBy] < b[sortBy]) {
@@ -124,14 +113,14 @@ export default class Table extends Component {
             else if (a[sortBy] > b[sortBy]) {
                 order = 1;
             }
-            return sort === 'desc' ? order * -1 : order;
+            return sortOrder === 'desc' ? order * -1 : order;
         }
     }
 
-    applySorting(sortBy, sort) {
+    applySorting(sortBy, sortOrder) {
         const rows = this.state.companies;
         if (sortBy === "head-id") {
-            rows.sort(this.compare('id', sort))
+            rows.sort(this.compare('id', sortOrder))
         }
         return rows;
     }
