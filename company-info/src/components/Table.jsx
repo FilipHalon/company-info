@@ -1,13 +1,19 @@
 import React, {Component} from 'react';
+import SearchInput from './SearchInput';
 import TableHead from './TableHead';
 import TableRow from './TableRow';
 
 export default class Table extends Component {
     constructor(props) {
         super(props);
-        this.state = {companies: []};
+        this.state = {
+            companies: [],
+            sort: null,
+            sortBy: null
+        };
         this.getCompanyInfo = this.getCompanyInfo.bind(this);
         this.getIncomeInfo = this.getIncomeInfo.bind(this);
+        this.handleSort = this.handleSort.bind(this);
     }
 
     getCompanyInfo = async () => {
@@ -59,24 +65,82 @@ export default class Table extends Component {
         }
         return companies;
     }
-    
+
     componentDidMount() {
-
         this.getCompanyInfo()
-            .then(res => {
-                return this.collectIncomeInfo(res);
-            })
-            .then(companies => {
-                console.log(companies);
-                this.setState({companies: companies})
-            })
+            .then(res => (this.setState({companies: res})));
 
+        // this.getCompanyInfo()
+        //     .then(res => {
+        //         return this.collectIncomeInfo(res);
+        //     })
+        //     .then(companies => {
+        //         console.log(companies);
+        //         this.setState({companies: companies})
+        //     })
+
+    }
+
+    handleSort(e) {
+        // const sort = this.state.sort;
+        // const sortBy = this.state.sortBy;
+        const target = e.target;
+        const columnLabel = target.id;
+        if (columnLabel === "head-id") {
+            this.setState({
+                sortBy: "head-id",
+                sort: "asc"
+            });
+            console.log(this.state.sort, this.state.sortBy);
+            const sorted = this.applySorting(this.state.sortBy, this.state.sort);
+            console.log(sorted);
+            this.setState({
+                companies: sorted
+            })
+        }
+        // else if (columnLabel === "head-name") {
+
+        // }
+        // else if (columnLabel === 'head-city') {
+
+        // }
+        // else if (columnLabel === 'head-total-income') {
+
+        // }
+        // else if (columnLabel === 'head-avg-income') {
+
+        // }
+        // else if (columnLabel === 'head-last-month-income') {
+
+        // }
+    }
+
+    compare(sortBy, sort) {
+        return (a, b) => {
+            let order = 0;
+            if (a[sortBy] < b[sortBy]) {
+                order = -1;
+            }
+            else if (a[sortBy] > b[sortBy]) {
+                order = 1;
+            }
+            return sort === 'desc' ? order * -1 : order;
+        }
+    }
+
+    applySorting(sortBy, sort) {
+        const rows = this.state.companies;
+        if (sortBy === "head-id") {
+            rows.sort(this.compare('id', sort))
+        }
+        return rows;
     }
 
     render() {
         return (
             <section className="table">
-                <TableHead/>
+                <SearchInput />
+                <TableHead handleClick = {this.handleSort} />
                 {this.state.companies.map(company => (<TableRow company={company} />))}
             </section>
             );

@@ -7,7 +7,7 @@ body {
   grid: 1fr / repeat(6, 1fr);
 }
 
-.head,
+#head,
 .row {
   display: contents;
 }
