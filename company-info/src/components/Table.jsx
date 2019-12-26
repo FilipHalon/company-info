@@ -98,9 +98,10 @@ export default class Table extends Component {
                 sortOrder: sortOrder
             });
         };
-        const sorted = this.applySorting(this.state.sortBy, this.state.sortOrder);
+        const rows = this.state.companies;
+        rows.sort(this.compare(this.state.sortBy, this.state.sortOrder))
         this.setState({
-            companies: sorted
+            companies: rows
         })
     }
 
@@ -115,14 +116,6 @@ export default class Table extends Component {
             }
             return sortOrder === 'desc' ? order * -1 : order;
         }
-    }
-
-    applySorting(sortBy, sortOrder) {
-        const rows = this.state.companies;
-        if (sortBy === "head-id") {
-            rows.sort(this.compare('id', sortOrder))
-        }
-        return rows;
     }
 
     render() {
