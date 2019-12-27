@@ -13,7 +13,7 @@ export default class Table extends Component {
             sortBy: 'id',
             sortOrder: 'asc',
             pageNum: 1,
-            pageItems: 50
+            pageItems: 25
         };
         this.handleSort = this.handleSort.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
@@ -170,10 +170,16 @@ export default class Table extends Component {
         companies = companies.slice(firstCompanyInRange, lastCompanyInRange);
         return (
             <section className="table">
-                <SearchInput handleChange={this.handleSearch} />
-                <TableHead handleClick={this.handleSort} />
-                {companies.map(company => <TableRow key={company.id} company={company} />)}
-                {numberOfPages.map(num => <PaginationButton key={num} pageNumber={num} handleClick={this.handlePagination} />)}
+                <div className="inputArea">
+                    <SearchInput handleChange={this.handleSearch} />
+                </div>
+                <div className="table">
+                    <TableHead handleClick={this.handleSort} />
+                    {companies.map(company => <TableRow key={company.id} company={company} />)}
+                </div>
+                <div className="buttons">
+                    {numberOfPages.map(num => <PaginationButton key={num} pageNumber={num} handleClick={this.handlePagination} />)}
+                </div>
             </section>
             );
     }
