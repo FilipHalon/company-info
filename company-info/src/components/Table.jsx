@@ -10,12 +10,11 @@ export default class Table extends Component {
         this.state = {
             allCompanies: [],
             companies: [],
-            sortBy: null,
-            sortOrder: null,
-            currentPage: 1,
+            sortBy: 'id',
+            sortOrder: 'asc',
+            pageNum: 1,
+            pageItems: 50
         };
-        // this.getCompanyInfo = this.getCompanyInfo.bind(this);
-        // this.getIncomeInfo = this.getIncomeInfo.bind(this);
         this.handleSort = this.handleSort.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
         this.handlePagination = this.handlePagination.bind(this);
@@ -55,7 +54,6 @@ export default class Table extends Component {
             comp['totalIncome'] = totalIncome;
             comp['lastMonthIncome'] = lastMonthIncome;
             comp['avgIncome'] = totalIncome/comp['incomes'].length;
-            // console.log(comp);
             return comp;
         }
         else {
@@ -155,16 +153,21 @@ export default class Table extends Component {
     }
 
     handlePagination(e) {
-        const pageNumber = parseInt(e.target.innerText);
-        console.log(pageNumber);
+        const pageNum = parseInt(e.target.innerText);
+        console.log(pageNum);
         this.setState({
-            currentPage: pageNumber
+            pageNum: pageNum
         })
     }
 
     render() {
-        const {companies} = this.state;
-        const numberOfPages = Array.from({length: Math.ceil((companies.length)/50)}, (v, i) => i+1);
+        let {companies} = this.state;
+        const {pageNum, pageItems} = this.state;
+        const numberOfPages = Array.from({length: Math.ceil((companies.length)/pageItems)}, (v, i) => i+1);
+        // great many thanks to Piotr Berebecki for inspiring this solution https://stackoverflow.com/questions/40232847/how-to-implement-pagination-in-reactjs
+        const lastCompanyInRange = pageNum * pageItems;
+        const firstCompanyInRange = lastCompanyInRange - pageItems;
+        companies = companies.slice(firstCompanyInRange, lastCompanyInRange);
         return (
             <section className="table">
                 <SearchInput handleChange={this.handleSearch} />
