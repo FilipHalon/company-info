@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import SearchInput from './SearchInput';
 import TableHead from './TableHead';
 import TableRow from './TableRow';
+import PaginationButton from './PaginationButton'
 
 export default class Table extends Component {
     constructor(props) {
@@ -10,12 +11,14 @@ export default class Table extends Component {
             companies: [],
             sortBy: null,
             sortOrder: null,
-            searchPhrase: null
+            searchPhrase: null,
+            currentPage: 1
         };
         // this.getCompanyInfo = this.getCompanyInfo.bind(this);
         // this.getIncomeInfo = this.getIncomeInfo.bind(this);
         this.handleSort = this.handleSort.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
+        this.handlePagination = this.handlePagination.bind(this);
     }
 
     getCompanyInfo = async () => {
@@ -131,7 +134,7 @@ export default class Table extends Component {
     filter(company) {
         let searchPhrase = this.state.searchPhrase;
         if (!searchPhrase) {
-            return <TableRow company={company} />;
+            return <TableRow key={company.id} company={company} />;
         }
         else {
             searchPhrase = new RegExp(searchPhrase);
@@ -141,18 +144,29 @@ export default class Table extends Component {
                     prop = prop.toString();
                 }
                 if (searchPhrase.test(prop)) {
-                    return <TableRow company={company} />;
+                    return <TableRow key={company.id} company={company} />;
                 }                            
             }
         }
     }
 
+    handlePagination(e) {
+        const pageNumber = parseInt(e.target.innerText);
+        console.log(pageNumber);
+        this.setState({
+            currentPage: pageNumber
+        })
+    }
+
     render() {
+        const {companies} = this.state;
+        const numberOfPages = Array.from({length: Math.ceil((companies.length)/50)}, (v, i) => i+1);
         return (
             <section className="table">
-                <SearchInput handleChange = {this.handleSearch} />
-                <TableHead handleClick = {this.handleSort} />
-                {this.state.companies.map(company => this.filter(company))}
+                <SearchInput handleChange={this.handleSearch} />
+                <TableHead handleClick={this.handleSort} />
+                {companies.map(company => this.filter(company))}
+                {numberOfPages.map(num => <PaginationButton pageNumber={num} handleClick={this.handlePagination} />)}
             </section>
             );
     }

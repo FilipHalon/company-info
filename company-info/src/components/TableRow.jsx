@@ -4,7 +4,7 @@ export default class TableRow extends Component {
     render () {
         const {company} = this.props;
         return (
-            <div key={company.id} className="row">
+            <div className="row">
                 <span className="column-id">{company.id}</span>
                 <span className="column-name">{company.name}</span>
                 <span className="column-city">{company.city}</span>
