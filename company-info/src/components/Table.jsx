@@ -8,11 +8,11 @@ export default class Table extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            allCompanies: [],
             companies: [],
             sortBy: null,
             sortOrder: null,
-            searchPhrase: null,
-            currentPage: 1
+            currentPage: 1,
         };
         // this.getCompanyInfo = this.getCompanyInfo.bind(this);
         // this.getIncomeInfo = this.getIncomeInfo.bind(this);
@@ -42,7 +42,7 @@ export default class Table extends Component {
         if (incomeInfoRes.ok) {
             const jsonIncomeInfoRes = await incomeInfoRes.json();
             comp['incomes'] = jsonIncomeInfoRes['incomes'];
-            const today = new Date;
+            const today = new Date();
             let totalIncome = 0;
             let lastMonthIncome = 0;
             comp['incomes'].forEach(val => {
@@ -73,7 +73,10 @@ export default class Table extends Component {
 
     componentDidMount() {
         this.getCompanyInfo()
-            .then(res => (this.setState({companies: res})));
+            .then(res => (this.setState({
+                allCompanies: res,
+                companies: res
+            })));
 
         // this.getCompanyInfo()
         //     .then(res => {
@@ -125,29 +128,30 @@ export default class Table extends Component {
 
     handleSearch(e) {
         const searchPhrase = e.target.value;
-        console.log(searchPhrase);
+        const filteredCompanies = this.filter(searchPhrase);
         this.setState({
-            searchPhrase: searchPhrase
+            companies: filteredCompanies
         })
     }
 
-    filter(company) {
-        let searchPhrase = this.state.searchPhrase;
-        if (!searchPhrase) {
-            return <TableRow key={company.id} company={company} />;
-        }
-        else {
-            searchPhrase = new RegExp(searchPhrase);
+    filter(searchPhrase) {
+        searchPhrase = new RegExp(searchPhrase);
+        const filteredCompanies = [];
+        const {allCompanies} = this.state;
+        allCompanies.forEach(company => {
             for (let key in company) {
                 let prop = company[key];
                 if (typeof prop === 'number') {
                     prop = prop.toString();
                 }
                 if (searchPhrase.test(prop)) {
-                    return <TableRow key={company.id} company={company} />;
+                    filteredCompanies.push(company);
+                    break;
                 }                            
             }
-        }
+        })
+        console.log(filteredCompanies);
+        return filteredCompanies
     }
 
     handlePagination(e) {
@@ -165,8 +169,8 @@ export default class Table extends Component {
             <section className="table">
                 <SearchInput handleChange={this.handleSearch} />
                 <TableHead handleClick={this.handleSort} />
-                {companies.map(company => this.filter(company))}
-                {numberOfPages.map(num => <PaginationButton pageNumber={num} handleClick={this.handlePagination} />)}
+                {companies.map(company => <TableRow key={company.id} company={company} />)}
+                {numberOfPages.map(num => <PaginationButton key={num} pageNumber={num} handleClick={this.handlePagination} />)}
             </section>
             );
     }
