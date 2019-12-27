@@ -9,7 +9,8 @@ export default class Table extends Component {
         this.state = {
             companies: [],
             sortBy: null,
-            sortOrder: null
+            sortOrder: null,
+            searchPhrase: null
         };
         this.getCompanyInfo = this.getCompanyInfo.bind(this);
         this.getIncomeInfo = this.getIncomeInfo.bind(this);
@@ -118,10 +119,17 @@ export default class Table extends Component {
         }
     }
 
+    handleSearch(e) {
+        const searchPhrase = e.target.value;
+        this.setState({
+            searchPhrase: searchPhrase
+        })
+    }
+
     render() {
         return (
             <section className="table">
-                <SearchInput />
+                <SearchInput handleChange = {this.handleSearch} />
                 <TableHead handleClick = {this.handleSort} />
                 {this.state.companies.map(company => (<TableRow company={company} />))}
             </section>
