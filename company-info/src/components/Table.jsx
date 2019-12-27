@@ -12,9 +12,10 @@ export default class Table extends Component {
             sortOrder: null,
             searchPhrase: null
         };
-        this.getCompanyInfo = this.getCompanyInfo.bind(this);
-        this.getIncomeInfo = this.getIncomeInfo.bind(this);
+        // this.getCompanyInfo = this.getCompanyInfo.bind(this);
+        // this.getIncomeInfo = this.getIncomeInfo.bind(this);
         this.handleSort = this.handleSort.bind(this);
+        this.handleSearch = this.handleSearch.bind(this);
     }
 
     getCompanyInfo = async () => {
@@ -121,9 +122,29 @@ export default class Table extends Component {
 
     handleSearch(e) {
         const searchPhrase = e.target.value;
+        console.log(searchPhrase);
         this.setState({
             searchPhrase: searchPhrase
         })
+    }
+
+    filter(company) {
+        let searchPhrase = this.state.searchPhrase;
+        if (!searchPhrase) {
+            return <TableRow company={company} />;
+        }
+        else {
+            searchPhrase = new RegExp(searchPhrase);
+            for (let key in company) {
+                let prop = company[key];
+                if (typeof prop === 'number') {
+                    prop = prop.toString();
+                }
+                if (searchPhrase.test(prop)) {
+                    return <TableRow company={company} />;
+                }                            
+            }
+        }
     }
 
     render() {
@@ -131,7 +152,7 @@ export default class Table extends Component {
             <section className="table">
                 <SearchInput handleChange = {this.handleSearch} />
                 <TableHead handleClick = {this.handleSort} />
-                {this.state.companies.map(company => (<TableRow company={company} />))}
+                {this.state.companies.map(company => this.filter(company))}
             </section>
             );
     }
