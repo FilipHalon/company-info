@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import Axios from 'axios';
 import SearchInput from './SearchInput';
 import TableHead from './TableHead';
 import TableRow from './TableRow';
@@ -8,6 +9,7 @@ export default class Table extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            loading: true,
             allCompanies: [],
             companies: [],
             sortBy: '',
@@ -22,10 +24,9 @@ export default class Table extends Component {
 
     getCompanyInfo = async () => {
         try {
-            const companyDataRes = await fetch('https://recruitment.hal.skygate.io/companies')
-            if (companyDataRes.ok) {
-                const jsonCompanyDataRes = await companyDataRes.json();
-                return await jsonCompanyDataRes;
+            const companyDataRes = await Axios.get('https://recruitment.hal.skygate.io/companies')
+            if (companyDataRes.statusText) {
+                return await companyDataRes.data;
             }
             else {
                 throw Error('Company data could not be retrieved.')
@@ -37,9 +38,9 @@ export default class Table extends Component {
     }
 
     getIncomeInfo = async comp => {
-        const incomeInfoRes = await fetch(`https://recruitment.hal.skygate.io/incomes/${comp['id']}`)
-        if (incomeInfoRes.ok) {
-            const jsonIncomeInfoRes = await incomeInfoRes.json();
+        const incomeInfoRes = await Axios.get(`https://recruitment.hal.skygate.io/incomes/${comp['id']}`)
+        if (incomeInfoRes.statusText) {
+            const jsonIncomeInfoRes = await incomeInfoRes.data;
             comp['incomes'] = jsonIncomeInfoRes['incomes'];
             const today = new Date();
             let totalIncome = 0;
@@ -70,20 +71,23 @@ export default class Table extends Component {
     }
 
     componentDidMount() {
-        this.getCompanyInfo()
-            .then(res => (this.setState({
-                allCompanies: res,
-                companies: res
-            })));
-
         // this.getCompanyInfo()
-        //     .then(res => {
-        //         return this.collectIncomeInfo(res);
-        //     })
-        //     .then(companies => {
-        //         console.log(companies);
-        //         this.setState({companies: companies})
-        //     })
+        //     .then(res => (this.setState({
+        //         allCompanies: res,
+        //         companies: res
+        //     })));
+
+        this.getCompanyInfo()
+            .then(res => {
+                return this.collectIncomeInfo(res);
+            })
+            .then(companies => {
+                console.log(companies);
+                this.setState({
+                    loading: false,
+                    companies: companies
+                });
+            })
 
     }
 
@@ -173,6 +177,7 @@ export default class Table extends Component {
                     <TableHead handleClick={this.handleSort} />
                     {companies.map(company => <TableRow key={company.id} company={company} />)}
                 </div>
+                {this.state.loading && <h3>The data is being loaded. It may take a couple of seconds.</h3>}
                 <div className="buttons">
                     {numberOfPages.map(num => <PaginationButton key={num} pageNumber={num} handleClick={this.handlePagination} />)}
                 </div>

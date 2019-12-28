@@ -1,6 +1,7 @@
 :root {
   --table-border-color: hsl(40, 16%, 83%);
   --table-border: solid var(--table-border-color) 1px;
+  --navigation-color: hsl(175, 82%, 57%);
 }
 
 body {
@@ -24,17 +25,17 @@ input {
   width: 50%;
 }
 
+h3 {
+  width: 100%;
+  text-align: center;
+}
+
 div.table {
   display: grid;
   grid: 1fr / minmax(40px, 0.5fr) repeat(5, minmax(120px, 1fr));
   border-left: var(--table-border);
   border-bottom: var(--table-border);
 }
-
-/* @media (min-width: 601px) and (max-width: 720px) {
-  div.table span {
-  }
-} */
 
 @media (max-width: 720px) {
   div.table {
@@ -58,10 +59,6 @@ div.table {
   color: hsl(40, 75%, 45%);
 }
 
-/* #head span {
-  background-color: hsl(40, 16%, 83%);
-} */
-
 div.table span {
   padding: .2em;
   font-size: 90%;
@@ -80,18 +77,10 @@ div.table span {
   }
 }
 
-/* div.table .row {
-  border-top: 0.1px solid gray;
-} */
-
 div.table span:nth-of-type(2n) {
   border-left: var(--table-border);
   border-right: var(--table-border);
 }
-
-/* div.table .row span {
-
-} */
 
 .buttons {
   display: flex;
@@ -105,17 +94,13 @@ div.table span:nth-of-type(2n) {
   width: 1.7em;
   margin: .2em;
   font-size: 1.5em;
-  border: solid hsl(175, 82%, 57%) 2px;
+  border: solid var(--navigation-color) 2px;
   background-color: white;
   -webkit-transition-duration: 0.4s;
   transition-duration: 0.4s;
 }
 
-/* .buttons button:first-of-type {
-  margin-left: 0;
-} */
-
 .buttons button:hover {
   cursor: pointer;
-  background-color: hsl(175, 82%, 57%);
+  background-color: var(--navigation-color);
 }
