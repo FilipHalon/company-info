@@ -93,18 +93,22 @@ export default class Table extends Component {
         const target = e.target;
         const columnLabel = target.id;
         if (sortBy !== columnLabel) {
+            console.log(1, columnLabel);
             this.setState({
                 sortBy: columnLabel,
                 sortOrder: "asc"
             });
+            console.log(1, this.state.sortBy, this.state.sortOrder);
         }
         else {
             sortOrder === "asc" ? sortOrder = "desc" : sortOrder = "asc";
             this.setState({
                 sortOrder: sortOrder
             });
+            console.log(2, this.state.sortBy, this.state.sortOrder);
         };
         const rows = this.state.companies;
+        console.log(3, this.state.sortBy, this.state.sortOrder);
         rows.sort(this.compare(this.state.sortBy, this.state.sortOrder))
         this.setState({
             companies: rows

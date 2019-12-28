@@ -5,6 +5,7 @@
 
 body {
   margin: 0;
+  font-family: sans-serif;
 }
 
 section.table {
@@ -15,7 +16,6 @@ section.table {
   width: 100%;
   margin-top: 2em;
   margin-bottom: 1em;
-  font-family: sans-serif;
   font-size: 1.1em;
 }
 
@@ -29,13 +29,17 @@ div.table {
   grid: 1fr / minmax(40px, 0.5fr) repeat(5, minmax(120px, 1fr));
   border-left: var(--table-border);
   border-bottom: var(--table-border);
-  font-family: sans-serif;
-  overflow: scroll;
 }
+
+/* @media (min-width: 601px) and (max-width: 720px) {
+  div.table span {
+  }
+} */
 
 @media (max-width: 720px) {
   div.table {
     grid: 1fr / minmax(30px, 0.5fr) repeat(5, minmax(100px, 1fr));
+    overflow: scroll;
   }
 }
 
