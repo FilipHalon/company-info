@@ -9,7 +9,6 @@ export default class Table extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            loading: true,
             allCompanies: [],
             companies: [],
             sortBy: '',
@@ -48,7 +47,7 @@ export default class Table extends Component {
             comp['incomes'].forEach(val => {
                 totalIncome += parseInt(val['value']);
                 const incomeDate = new Date(val['date']);
-                if ((incomeDate.getFullYear() == today.getFullYear() && incomeDate.getMonth() == today.getMonth() - 1) || (incomeDate.getMonth() == 12 && today.getMonth() == 1 && today.getFullYear() - 1 == incomeDate.getFullYear())) {
+                if ((incomeDate.getFullYear() === today.getFullYear() && incomeDate.getMonth() === today.getMonth() - 1) || (incomeDate.getMonth() === 12 && today.getMonth() === 1 && today.getFullYear() - 1 === incomeDate.getFullYear())) {
                     lastMonthIncome += parseInt(val['value']);
                 };
             });
@@ -63,32 +62,23 @@ export default class Table extends Component {
     }
 
     collectIncomeInfo = async (res) => {
-        const companies = []; 
+        const { allCompanies, companies } = this.state;
         for (let comp of res) {
-            companies.push(await this.getIncomeInfo(comp))
+            let fullInfo = await this.getIncomeInfo(comp)
+            allCompanies.push(fullInfo);
+            companies.push(fullInfo);
+            this.setState({
+                allCompanies: allCompanies,
+                companies: companies
+            })
         }
-        return companies;
     }
 
     componentDidMount() {
-        // this.getCompanyInfo()
-        //     .then(res => (this.setState({
-        //         allCompanies: res,
-        //         companies: res
-        //     })));
-
-        this.getCompanyInfo()
-            .then(res => {
-                return this.collectIncomeInfo(res);
-            })
-            .then(companies => {
-                console.log(companies);
-                this.setState({
-                    loading: false,
-                    companies: companies
-                });
-            })
-
+            this.getCompanyInfo().then(res => {
+                this.collectIncomeInfo(res)
+            }
+        )
     }
 
     handleSort(e) {
@@ -177,7 +167,6 @@ export default class Table extends Component {
                     <TableHead handleClick={this.handleSort} />
                     {companies.map(company => <TableRow key={company.id} company={company} />)}
                 </div>
-                {this.state.loading && <h3>The data is being loaded. It may take a couple of seconds.</h3>}
                 <div className="buttons">
                     {numberOfPages.map(num => <PaginationButton key={num} pageNumber={num} handleClick={this.handlePagination} />)}
                 </div>
