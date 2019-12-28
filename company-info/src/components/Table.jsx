@@ -10,8 +10,8 @@ export default class Table extends Component {
         this.state = {
             allCompanies: [],
             companies: [],
-            sortBy: 'id',
-            sortOrder: 'asc',
+            sortBy: '',
+            sortOrder: '',
             pageNum: 1,
             pageItems: 25
         };
@@ -88,30 +88,23 @@ export default class Table extends Component {
     }
 
     handleSort(e) {
-        const sortBy = this.state.sortBy;
+        let sortBy = this.state.sortBy;
         let sortOrder = this.state.sortOrder;
         const target = e.target;
         const columnLabel = target.id;
         if (sortBy !== columnLabel) {
-            console.log(1, columnLabel);
-            this.setState({
-                sortBy: columnLabel,
-                sortOrder: "asc"
-            });
-            console.log(1, this.state.sortBy, this.state.sortOrder);
+            sortBy = columnLabel;
+            sortOrder = 'asc';
         }
         else {
             sortOrder === "asc" ? sortOrder = "desc" : sortOrder = "asc";
-            this.setState({
-                sortOrder: sortOrder
-            });
-            console.log(2, this.state.sortBy, this.state.sortOrder);
         };
         const rows = this.state.companies;
-        console.log(3, this.state.sortBy, this.state.sortOrder);
-        rows.sort(this.compare(this.state.sortBy, this.state.sortOrder))
+        rows.sort(this.compare(sortBy, sortOrder))
         this.setState({
-            companies: rows
+            companies: rows,
+            sortBy: sortBy,
+            sortOrder: sortOrder
         })
     }
 
@@ -158,7 +151,6 @@ export default class Table extends Component {
 
     handlePagination(e) {
         const pageNum = parseInt(e.target.innerText);
-        console.log(pageNum);
         this.setState({
             pageNum: pageNum
         })
