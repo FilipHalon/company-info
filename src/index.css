@@ -1,7 +1,7 @@
 :root {
   --table-border-color: hsl(40, 16%, 83%);
   --table-border: solid var(--table-border-color) 1px;
-  --navigation-color: hsl(175, 82%, 57%);
+  --table-header-font-color: hsl(40, 75%, 45%);
 }
 
 body {
@@ -9,39 +9,37 @@ body {
   font-family: sans-serif;
 }
 
+#root {
+  display: flex;
+  justify-content: center;
+}
+
 section.table {
-  margin: auto 1.5em;
+  margin: auto 5vw;
+  width: 100%;
+  max-width: 1400px;
 }
 
 .inputArea {
   width: 100%;
-  margin-top: 2em;
-  margin-bottom: 1em;
-  font-size: 1.1em;
+  margin-top: 3vh;
+  margin-bottom: 2.6vw;
+  font-size: 73%;
 }
 
 input {
-  height: 1.7em;
-  width: 50%;
-}
-
-h3 {
-  width: 100%;
-  text-align: center;
+  height: 170%;
+  max-height: 2vw;
+  width: 75%;
+  border: var(--table-header-font-color) solid 1px;
 }
 
 div.table {
   display: grid;
-  grid: 1fr / minmax(40px, 0.5fr) repeat(5, minmax(120px, 1fr));
+  grid: 1fr / minmax(30px, 0.5fr) minmax(120px, 1fr) minmax(110px, 1fr) repeat(3, minmax(90px, 1fr));
   border-left: var(--table-border);
   border-bottom: var(--table-border);
-}
-
-@media (max-width: 720px) {
-  div.table {
-    grid: 1fr / minmax(30px, 0.5fr) repeat(5, minmax(100px, 1fr));
-    overflow: scroll;
-  }
+  overflow: scroll;
 }
 
 #head,
@@ -60,21 +58,9 @@ div.table {
 }
 
 div.table span {
-  padding: .2em;
-  font-size: 90%;
+  padding: .7vh;
+  font-size: 73%;
   border-top: var(--table-border);
-}
-
-@media (max-width: 600px) {
-  div.table span {
-    font-size: 2.5vw;
-  }
-}
-
-@media (min-width: 601px) and (max-width: 720px) {
-  div.table span {
-    font-size: 2vw;
-  }
 }
 
 div.table span:nth-of-type(2n) {
@@ -85,16 +71,18 @@ div.table span:nth-of-type(2n) {
 .buttons {
   display: flex;
   flex-wrap: wrap;
-  margin-top: 1em;
-  margin-bottom: 2em;
+  margin-top: 1vh;
+  margin-bottom: 2vh;
 }
 
 .buttons button {
-  height: 1.7em;
-  width: 1.7em;
-  margin: .2em;
-  font-size: 1.5em;
-  border: solid var(--navigation-color) 2px;
+  height: 3.5vh;
+  width: 13%;
+  max-height: 2.6vw;
+  max-width: 40px;
+  margin: .4vw;
+  font-size: 90%;
+  border: solid var(--table-header-font-color) 1px;
   background-color: white;
   -webkit-transition-duration: 0.4s;
   transition-duration: 0.4s;
@@ -102,5 +90,38 @@ div.table span:nth-of-type(2n) {
 
 .buttons button:hover {
   cursor: pointer;
-  background-color: var(--navigation-color);
+  background-color: var(--table-header-font-color);
+}
+
+@media (min-width: 600px) {
+  .inputArea {
+    font-size: 90%;
+  }
+
+  div.table {
+    overflow: visible;
+  }
+
+  div.table span {
+    font-size: 80%;
+  }
+
+  .buttons button {
+    width: 10%;
+  }
+}
+
+@media (min-width: 800px) {
+  .inputArea {
+    height: 1.5vh;
+    font-size: 100%;
+  }
+
+  div.table span {
+    font-size: 90%;
+  }
+
+  .buttons button {
+    width: 5%;
+  }
 }
