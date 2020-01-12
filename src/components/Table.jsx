@@ -56,7 +56,7 @@ export default class Table extends Component {
                     lastMonthIncome += itemValue;
                 };
             });
-            comp['totalIncome'] = totalIncome.toFixed(2);
+            comp['totalIncome'] = totalIncome === 0 ? 0 : totalIncome.toFixed(2);
             comp['lastMonthIncome'] = lastMonthIncome === 0 ? 0 : lastMonthIncome.toFixed(2);
             comp['avgIncome'] = (totalIncome/comp['incomes'].length).toFixed(2);
             return comp;
