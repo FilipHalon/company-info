@@ -42,18 +42,23 @@ export default class Table extends Component {
             const jsonIncomeInfoRes = await incomeInfoRes.data;
             comp['incomes'] = jsonIncomeInfoRes['incomes'];
             const today = new Date();
+            const todayYear = today.getFullYear();
+            const todayMonth = today.getMonth() + 1;
             let totalIncome = 0;
             let lastMonthIncome = 0;
-            comp['incomes'].forEach(val => {
-                totalIncome += parseInt(val['value']);
-                const incomeDate = new Date(val['date']);
-                if ((incomeDate.getFullYear() === today.getFullYear() && incomeDate.getMonth() === today.getMonth() - 1) || (incomeDate.getMonth() === 12 && today.getMonth() === 1 && today.getFullYear() - 1 === incomeDate.getFullYear())) {
-                    lastMonthIncome += parseInt(val['value']);
+            comp['incomes'].forEach(item => {
+                const itemValue = parseFloat(item['value'])
+                totalIncome += itemValue;
+                const incomeDate = new Date(item['date']);
+                const incomeYear = incomeDate.getFullYear();
+                const incomeMonth = incomeDate.getMonth() + 1;
+                if ((incomeYear === todayYear && incomeMonth === todayMonth - 1) || (incomeYear === todayYear - 1 && (incomeMonth === 12 && todayMonth === 1))) {
+                    lastMonthIncome += itemValue;
                 };
             });
-            comp['totalIncome'] = totalIncome;
-            comp['lastMonthIncome'] = lastMonthIncome;
-            comp['avgIncome'] = totalIncome/comp['incomes'].length;
+            comp['totalIncome'] = totalIncome.toFixed(2);
+            comp['lastMonthIncome'] = lastMonthIncome === 0 ? 0 : lastMonthIncome.toFixed(2);
+            comp['avgIncome'] = (totalIncome/comp['incomes'].length).toFixed(2);
             return comp;
         }
         else {
