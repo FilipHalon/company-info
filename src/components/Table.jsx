@@ -14,7 +14,7 @@ export default class Table extends Component {
             sortBy: '',
             sortOrder: '',
             pageNum: 1,
-            pageItems: 25
+            pageItems: 15
         };
         this.handleSort = this.handleSort.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
