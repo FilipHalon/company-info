@@ -75,7 +75,7 @@ div.table span:nth-of-type(2n) {
   margin-bottom: 2vh;
 }
 
-.buttons button {
+/* .buttons button {
   height: 3.5vh;
   width: 13%;
   max-height: 2.6vw;
@@ -91,7 +91,7 @@ div.table span:nth-of-type(2n) {
 .buttons button:hover {
   cursor: pointer;
   background-color: var(--table-header-font-color);
-}
+} */
 
 @media (min-width: 600px) {
   .inputArea {
@@ -106,9 +106,9 @@ div.table span:nth-of-type(2n) {
     font-size: 80%;
   }
 
-  .buttons button {
+  /* .buttons button {
     width: 10%;
-  }
+  } */
 }
 
 @media (min-width: 800px) {
@@ -121,7 +121,7 @@ div.table span:nth-of-type(2n) {
     font-size: 90%;
   }
 
-  .buttons button {
+  /* .buttons button {
     width: 5%;
-  }
+  } */
 }
