@@ -122,7 +122,6 @@ div.table span:nth-of-type(2n) {
   }
 
   .buttons button {
-    /* height: 2vh; */
     width: 5%;
   }
 }
