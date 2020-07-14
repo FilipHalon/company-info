@@ -4,6 +4,7 @@ import SearchInput from './SearchInput';
 import TableHead from './TableHead';
 import TableRow from './TableRow';
 import PaginationButton from './PaginationButton'
+import {StyledTable} from './Styled';
 
 export default class Table extends Component {
     constructor(props) {
@@ -164,7 +165,7 @@ export default class Table extends Component {
         const firstCompanyInRange = lastCompanyInRange - pageItems;
         companies = companies.slice(firstCompanyInRange, lastCompanyInRange);
         return (
-            <section className="table">
+            <StyledTable>
                 <div className="inputArea">
                     <SearchInput handleChange={this.handleSearch} />
                 </div>
@@ -175,7 +176,7 @@ export default class Table extends Component {
                 <div className="buttons">
                     {numberOfPages.map(num => <PaginationButton key={num} pageNumber={num} handleClick={this.handlePagination} />)}
                 </div>
-            </section>
+            </StyledTable>
             );
     }
 }

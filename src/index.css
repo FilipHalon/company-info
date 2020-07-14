@@ -14,11 +14,11 @@ body {
   justify-content: center;
 }
 
-section.table {
+/* section.table {
   margin: auto 5vw;
   width: 100%;
   max-width: 1400px;
-}
+} */
 
 .inputArea {
   width: 100%;

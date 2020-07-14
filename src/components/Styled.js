@@ -2,6 +2,28 @@ import styled from 'styled-components';
 
 const buttonColor = 'hsl(40, 75%, 45%)'
 
+export const StyledTable = styled.section`
+    margin: auto 5vw;
+    width: 100%;
+    max-width: 1400px;
+`;
+
+export const StyledInputArea = styled.div`
+    width: 100%;
+    margin-top: 3vh;
+    margin-bottom: 2.6vw;
+    font-size: 73%;
+
+    @media (min-width: 600px) {
+        font-size: 90%;
+    }
+
+    @media (min-width: 800px) {
+        height: 1.5vh;
+        font-size: 100%;
+    }
+`;
+
 export const StyledPaginationButton = styled.button`
     height: 3.5vh;
     width: 13%;
@@ -16,7 +38,7 @@ export const StyledPaginationButton = styled.button`
 
     $:hover {
         cursor: pointer;
-        background-color: var(--table-header-font-color);
+        background-color: ${buttonColor};
     }
 
     @media (min-width: 600px) {
